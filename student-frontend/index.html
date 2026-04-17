@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scholar — Student Management</title>
+
+  <!-- Google Fonts: DM Serif Display (headings) + DM Sans (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── Animated background grid ───────────────────────────────────── -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <!-- Floating ambient orbs -->
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+
+  <!-- ── App Shell ───────────────────────────────────────────────────── -->
+  <div class="app">
+
+    <!-- ── Sidebar ──────────────────────────────────────────────────── -->
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-icon">✦</span>
+        <span class="brand-name">Scholar</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active">
+          <span class="nav-icon">⊞</span>
+          <span>Dashboard</span>
+        </a>
+        
+
+      <div class="sidebar-footer">
+        <div class="avatar-block">
+          <div class="avatar">A</div>
+          <div>
+            <div class="avatar-name">AIMSCS</div>
+            <div class="avatar-role">System Admin</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── Main Content ─────────────────────────────────────────────── -->
+    <main class="main">
+
+      <!-- ── Top bar ────────────────────────────────────────────────── -->
+      <header class="topbar">
+        <div>
+          <h1 class="page-title">Student Dashboard</h1>
+          <p class="page-subtitle">Manage, search, and track student records</p>
+        </div>
+        <div class="topbar-right">
+          <!-- Toast notification area -->
+          <div id="toast" class="toast" aria-live="polite"></div>
+        </div>
+      </header>
+
+      <!-- ── Stats Row ───────────────────────────────────────────────── -->
+      <section class="stats-row" id="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Total Students</div>
+          <div class="stat-value" id="stat-total">—</div>
+          <div class="stat-bar"><div class="stat-bar-fill" id="bar-total" style="width:100%"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Class Average</div>
+          <div class="stat-value" id="stat-avg">—</div>
+          <div class="stat-bar"><div class="stat-bar-fill accent" id="bar-avg"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Top Scorer</div>
+          <div class="stat-value" id="stat-top">—</div>
+          <div class="stat-bar"><div class="stat-bar-fill gold" id="bar-top" style="width:100%"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pass Rate</div>
+          <div class="stat-value" id="stat-pass">—</div>
+          <div class="stat-bar"><div class="stat-bar-fill green" id="bar-pass"></div></div>
+        </div>
+      </section>
+
+      <!-- ── Two-column layout: Form + Search ───────────────────────── -->
+      <div class="two-col">
+
+        <!-- Add / Edit Student Form -->
+        <section class="card form-card">
+          <div class="card-header">
+            <h2 class="card-title" id="form-title">Add Student</h2>
+            <span class="card-badge" id="form-badge">NEW</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="inp-name">Full Name</label>
+            <input id="inp-name" class="form-input" type="text" placeholder="e.g. Alice Johnson" autocomplete="off" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="inp-roll">Roll Number</label>
+              <input id="inp-roll" class="form-input" type="text" placeholder="e.g. CS101" autocomplete="off" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="inp-marks">Marks <span class="label-hint">(0–100)</span></label>
+              <input id="inp-marks" class="form-input" type="number" placeholder="e.g. 88" min="0" max="100" />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary" id="btn-submit">
+              <span class="btn-icon">＋</span>
+              <span id="btn-label">Add Student</span>
+            </button>
+            <button class="btn btn-ghost" id="btn-cancel" style="display:none">Cancel</button>
+          </div>
+
+          <!-- Hidden field holds the ID being edited -->
+          <input type="hidden" id="edit-id" value="" />
+        </section>
+
+        <!-- Search & Filter -->
+        <section class="card search-card">
+          <div class="card-header">
+            <h2 class="card-title">Search & Filter</h2>
+            <span class="card-badge teal">LIVE</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="inp-search">Search by Name</label>
+            <div class="input-icon-wrap">
+              <span class="input-icon">⌕</span>
+              <input id="inp-search" class="form-input with-icon" type="text" placeholder="Type a name…" autocomplete="off" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="inp-marks-filter">Marks above</label>
+            <div class="input-icon-wrap">
+              <span class="input-icon">◈</span>
+              <input id="inp-marks-filter" class="form-input with-icon" type="number" placeholder="e.g. 75" min="0" max="100" />
+            </div>
+          </div>
+
+          <div class="filter-chips" id="active-filters"></div>
+
+          <button class="btn btn-outline full-width" id="btn-clear-filters">
+            Clear Filters
+          </button>
+        </section>
+
+      </div><!-- /.two-col -->
+
+      <!-- ── Students Table ──────────────────────────────────────────── -->
+      <section class="card table-card">
+        <div class="card-header">
+          <h2 class="card-title">Students <span class="result-count" id="result-count"></span></h2>
+          <div class="table-toolbar">
+            <button class="btn btn-sm btn-ghost" id="btn-refresh" title="Refresh">↺ Refresh</button>
+          </div>
+        </div>
+
+        <!-- Skeleton loader -->
+        <div id="skeleton" class="skeleton-wrapper">
+          <div class="skeleton-row"></div>
+          <div class="skeleton-row"></div>
+          <div class="skeleton-row"></div>
+        </div>
+
+        <!-- Actual table -->
+        <div class="table-scroll" id="table-wrap" style="display:none">
+          <table class="student-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Roll No</th>
+                <th>Marks</th>
+                <th>Grade</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="student-tbody">
+              <!-- rows injected by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty state -->
+        <div id="empty-state" class="empty-state" style="display:none">
+          <div class="empty-icon">◎</div>
+          <p class="empty-title">No students found</p>
+          <p class="empty-sub">Try adjusting your filters or add a new student above.</p>
+        </div>
+      </section>
+
+    </main>
+  </div><!-- /.app -->
+
+  <!-- ── Delete Confirm Modal ────────────────────────────────────────── -->
+  <div class="modal-backdrop" id="modal-backdrop" style="display:none" aria-modal="true" role="dialog">
+    <div class="modal">
+      <div class="modal-icon">⚠</div>
+      <h3 class="modal-title">Delete Student?</h3>
+      <p class="modal-body" id="modal-body">This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="modal-cancel">Cancel</button>
+        <button class="btn btn-danger" id="modal-confirm">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
